@@ -5,7 +5,6 @@ import random
 # Initialize game engine
 pygame.init()
 
-
 # Window
 WIDTH = 1000
 HEIGHT = 700
@@ -13,7 +12,6 @@ SIZE = (WIDTH, HEIGHT)
 TITLE = "Cosmic Intruders"
 screen = pygame.display.set_mode(SIZE)
 pygame.display.set_caption(TITLE)
-
 
 # Timer
 clock = pygame.time.Clock()
@@ -44,12 +42,11 @@ last_hit = pygame.image.load('assets/images/EmptyShield.png')
 mob_purple = pygame.image.load('assets/images/enemyShipPurple.png')
 space = pygame.image.load('assets/images/background.jpg')
 
-
-
 # Stages
 START = 0
 PLAYING = 1
 END = 2
+
 
 # Game classes
 class Ship(pygame.sprite.Sprite):
@@ -76,16 +73,12 @@ class Ship(pygame.sprite.Sprite):
         laser.rect.centery = self.rect.top
         lasers.add(laser)
 
-
-
-
     def update(self, bombs):
         hit_list = pygame.sprite.spritecollide(self, bombs, True)
 
         for hit in hit_list:
             # play hit sound
             self.shield -= 1
-
 
         if self.shield == 0:
             self.kill()
@@ -140,9 +133,6 @@ class Laser(pygame.sprite.Sprite):
         if self.rect.bottom < 0:
             self.kill()
 
-
-
-
 class Mob(pygame.sprite.Sprite):
 
     def __init__(self, x, y, image, shield):
@@ -173,8 +163,6 @@ class Mob(pygame.sprite.Sprite):
         if self.shield == 0:
             self.kill()
 
-
-
 class Bomb(pygame.sprite.Sprite):
 
     def __init__(self, image):
@@ -190,7 +178,6 @@ class Bomb(pygame.sprite.Sprite):
 
         if self.rect.top > HEIGHT:
             self.kill()
-
 
 class Fleet:
 
@@ -218,7 +205,6 @@ class Fleet:
             for m in mobs:
                 m.rect.y += 32
 
-
     def choose_bomber(self):
         rand = random.randrange(0, self.bomb_rate)
         all_mobs = mobs.sprites()
@@ -236,25 +222,27 @@ class Fleet:
             bomber.drop_bomb()
 
 
-
 # Make game objects
-ship = Ship(484, 636, ship_img)
-mob1 = Mob(128, 64, mob_img, 1)
-mob2 = Mob(256, 64, mob_img, 1)
-mob3 = Mob(384, 64, mob_img, 1)
-mob4 = Mob(128, 4, mob_img, 1)
-mob5 = Mob(256, 4, mob_img, 1)
-mob6 = Mob(384, 4, mob_img, 1)
-mob7 = Mob(512, 64, mob_img, 1)
-mob8 = Mob(512, 4, mob_img, 1)
-mob9 = Mob(640, 64, mob_img, 1)
-mob10 = Mob(640, 4, mob_img, 1)
-mob11 = Mob(128, -56, mob_purple, 2)
-mob12 = Mob(256, -56, mob_purple, 2)
-mob13 = Mob(384, -56, mob_purple, 2)
-mob14 = Mob(512, -56, mob_purple, 2)
-mob15 = Mob(640, -56, mob_purple, 2)
-star = Sky()
+def setup(Ship, Mob, Sky):
+    ship = Ship(484, 636, ship_img)
+    mob1 = Mob(128, 64, mob_img, 1)
+    mob2 = Mob(256, 64, mob_img, 1)
+    mob3 = Mob(384, 64, mob_img, 1)
+    mob4 = Mob(128, 4, mob_img, 1)
+    mob5 = Mob(256, 4, mob_img, 1)
+    mob6 = Mob(384, 4, mob_img, 1)
+    mob7 = Mob(512, 64, mob_img, 1)
+    mob8 = Mob(512, 4, mob_img, 1)
+    mob9 = Mob(640, 64, mob_img, 1)
+    mob10 = Mob(640, 4, mob_img, 1)
+    mob11 = Mob(128, -56, mob_purple, 2)
+    mob12 = Mob(256, -56, mob_purple, 2)
+    mob13 = Mob(384, -56, mob_purple, 2)
+    mob14 = Mob(512, -56, mob_purple, 2)
+    mob15 = Mob(640, -56, mob_purple, 2)
+    star = Sky()
+
+setup(Ship, Mob, Sky)
 
 # Make sprite groups
 player = pygame.sprite.GroupSingle()
@@ -272,11 +260,8 @@ bombs = pygame.sprite.Group()
 
 fleet = Fleet(mobs)
 
-
-
 # set stage
 stage = START
-
 
 # Game helper functions
 def show_title_screen():
@@ -286,7 +271,6 @@ def show_title_screen():
 def show_stats(player):
     score_text = FONT_MD.render(str(player.score), 1, WHITE)
     screen.blit(score_text, [32, 32])
-
 
 
 # Game loop
@@ -316,9 +300,6 @@ while not done:
         elif pressed[pygame.K_RIGHT]:
             ship.move_right()
 
-
-
-
         # Game logic (Check for collisions, update points, etc.)
         if stage == PLAYING:
             player.update(bombs)
@@ -328,8 +309,6 @@ while not done:
             bombs.update()
             fleet.update()
             star.update()
-
-
 
     # Drawing code (Describe the picture. It isn't actually drawn yet.)
     screen.fill(BLACK)
@@ -357,15 +336,11 @@ while not done:
         screen.blit(win, [400, 100])
         #screen.blit(miss, [250, 175])
 
-
     # Update screen (Actually draw the picture in the window.)
     pygame.display.flip()
-
 
     # Limit refresh rate of game loop
     clock.tick(refresh_rate)
 
-
 # Close window and quit
 pygame.quit()
-
